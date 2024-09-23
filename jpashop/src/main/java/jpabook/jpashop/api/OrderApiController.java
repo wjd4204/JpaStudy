@@ -48,6 +48,20 @@ public class OrderApiController {
                 .toList();
     }
 
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3(){
+        List<Order> orders = orderRepository.findAllWithItem(); // 이 부분만 수정하여 알맞은 데이터를 가지고 오게끔 할 수 있다.
+
+        for (Order order : orders) {
+            System.out.println("order ref=" + order + " id=" + order.getId());
+        }
+        List<OrderDto> result = orders.stream()
+                .map(o -> new OrderDto(o))
+                .toList();
+
+        return result;
+    }
+
     @Getter
     static class OrderDto {
         private Long orderId;
