@@ -10,6 +10,7 @@ import jpabook.jpashop.service.OrderService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -55,6 +56,27 @@ public class OrderApiController {
         for (Order order : orders) {
             System.out.println("order ref=" + order + " id=" + order.getId());
         }
+        List<OrderDto> result = orders.stream()
+                .map(o -> new OrderDto(o))
+                .toList();
+
+        return result;
+    }
+
+    /*
+    batchsize 설정 시 실행되는 쿼리들
+    1. fetch join으로 엮인 엔티티까지 한 번에 조회되는 Order 엔티티
+    2. BatchSize에 맞게 가져와지는 OrderItem 엔티티
+    3. 한 번에 모든 id를 가져오는 Item 엔티티(기존에는 Item엔티티를 일일이 가져왔다.)
+    원래 6번이었던 쿼리의 개수가 3개로 줄어든다!
+     */
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit
+    ){
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit); // 'ToOne'으로만 매핑되는 엔티티를 페치 조인한 엔티티 목록
+
         List<OrderDto> result = orders.stream()
                 .map(o -> new OrderDto(o))
                 .toList();
