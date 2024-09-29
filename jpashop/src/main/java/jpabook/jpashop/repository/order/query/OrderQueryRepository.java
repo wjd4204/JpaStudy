@@ -76,4 +76,15 @@ public class OrderQueryRepository {
                 .getResultList();
     }
 
+    public List<OrderFlatDto> findAllByDto_flat() {
+        return em.createQuery(
+                "select new jpabook.jpashop.repository.order.query.OrderFlatDto(o.id, m.name, o.orderDate, o.status, d.address, i.name, oi.orderPrice, oi.count)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi" +
+                        " join oi.item i", OrderFlatDto.class
+        ).getResultList();
+        // 위의 쿼리를 실행했을 때 일대다 관계를 내보내기 때문에 아이디가 중복되어 나가게 되는 단점이 있지만, 쿼리가 1번만 나간다는 장점이 존재한다.
+    }
 }
