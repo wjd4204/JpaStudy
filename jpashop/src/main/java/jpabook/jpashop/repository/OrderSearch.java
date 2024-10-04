@@ -10,5 +10,4 @@ public class OrderSearch {
 
     private String memberName;
     private Orderstatus orderStatus; // 주문 상태
-
 }
