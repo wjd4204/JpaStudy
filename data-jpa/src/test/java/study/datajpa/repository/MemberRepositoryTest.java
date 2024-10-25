@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
+import study.datajpa.entity.Team;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,9 @@ public class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     @DisplayName("")
     @Test
@@ -88,5 +94,50 @@ public class MemberRepositoryTest {
 
         List<Member> result = memberRepository.findUser("AAA", 10);
         assertThat(result.get(0)).isEqualTo(m1);
+    }
+
+    @DisplayName("query 어노테이션을 사용하여 username을 리스트로 보여줍니다.")
+    @Test
+    public void findUsernameList(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<String> usernameList = memberRepository.findUsernameList();
+        for(String s : usernameList){
+            System.out.println("s = " + s);
+        }
+    }
+
+    @DisplayName("쿼리문을 작성하여 member와 조인되는 team의 값도 같이 조회한다.")
+    @Test
+    public void findMemberDto(){
+
+        Team team = new Team("TeamA");
+        teamRepository.save(team);
+
+        Member m1 = new Member("AAA", 10);
+        m1.setTeam(team);
+        memberRepository.save(m1);
+
+        List<MemberDto> memberDto = memberRepository.findMemberDto();
+        for(MemberDto dto : memberDto){
+            System.out.println("dto =" + dto);
+        }
+    }
+
+    @DisplayName("query 어노테이션을 사용하여 username을 리스트로 보여줍니다.")
+    @Test
+    public void findByNames(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
+        for(Member member : result){
+            System.out.println("member = " + member);
+        }
     }
 }
