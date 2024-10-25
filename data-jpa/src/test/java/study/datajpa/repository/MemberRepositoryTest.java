@@ -140,4 +140,20 @@ public class MemberRepositoryTest {
             System.out.println("member = " + member);
         }
     }
+
+    @DisplayName("query 어노테이션을 사용하여 username을 리스트로 보여줍니다.")
+    @Test
+    public void returnType(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> aaa = memberRepository.findListByUsername("AAA"); // 아무것도 가져오지 않았을 경우, 오류가 아닌 빈 컬렉션을 반환한다!!
+        Member findMember = memberRepository.findMemberByUsername("AAA"); // 단일 객체는 빈 값이 아닌 null을 반환한다!!
+        System.out.println("findMember = " + findMember);
+
+        Optional<Member> findOptional = memberRepository.findOptionalByUsername("AAA"); // optional은 옵션사항이라는 의미로, 없으면 빈 객체 반환!!
+        System.out.println("findOptional = " + findOptional);
+    }
 }
