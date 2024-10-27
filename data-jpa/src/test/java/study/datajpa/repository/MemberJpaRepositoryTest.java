@@ -77,4 +77,27 @@ class MemberJpaRepositoryTest {
         assertThat(result.size()).isEqualTo(1);
     }
 
+    @DisplayName("페이징 기술을 활용하여 원하는 범위의 값을 가지고 올 수 있다.")
+    @Test
+    void test(){
+     //given
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 10));
+        memberJpaRepository.save(new Member("member3", 10));
+        memberJpaRepository.save(new Member("member4", 10));
+        memberJpaRepository.save(new Member("member5", 10));
+
+        int age = 10;
+        int offset = 1;
+        int limit = 3;
+
+     //when
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(age);
+
+        //then
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(5);
+    }
+
 }
