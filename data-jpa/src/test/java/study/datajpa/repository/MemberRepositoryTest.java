@@ -218,7 +218,7 @@ public class MemberRepositoryTest {
         assertThat(resultCount).isEqualTo(3);
     }
 
-    @DisplayName("")
+    @DisplayName("EntityGraph를 사용하여 페치 조인을 최적화한다.")
     @Test
     public void findMemberLazy(){
      //given
@@ -248,6 +248,33 @@ public class MemberRepositoryTest {
             System.out.println("member.team = " + member.getTeam().getName());
         }
 
-     //then
+    }
+
+    @Test
+    public void queryHint(){
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush(); // 강제 플러시는 db에 쿼리가 나간다.
+        em.clear(); // 영속성 컨텍스트의 결과를 db에 동기화한다. 그리고 영속성 컨텍스트는 비워진다.
+
+        //when
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2"); // QueryHint를 썻기 때문에 허용되는 이외의 것은 모두 무시해버린다.
+
+        em.flush();
+    }
+
+    @Test
+    public void lock(){
+        //given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        //when
+        // 트랜잭션끼리 충돌이 발생한다고 가정하고 락을 건다. DB에서 제공하는 락기능을 사용한다.
+        // LockMode가 PESSIMISTIC_WRITE를 사용하면 다른 트랜잭션에서 읽거나 쓰지를 못한다. 이를 '배타적 잠금'이라고 한다.
+        List<Member> result = memberRepository.findLockByUsername("member1");
     }
 }
