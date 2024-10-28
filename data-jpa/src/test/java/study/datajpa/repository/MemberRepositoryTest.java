@@ -217,4 +217,37 @@ public class MemberRepositoryTest {
         //then
         assertThat(resultCount).isEqualTo(3);
     }
+
+    @DisplayName("")
+    @Test
+    public void findMemberLazy(){
+     //given
+        //member1 -> teamA
+        //member2 -> teamB
+
+        Team teamA = new Team("TeamA");
+        Team teamB = new Team("TeamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 10, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+      //when N+1
+        //findMemberFetchJoin의 join을 통해 한 번에 엔티티를 조회할 수 있다! N + 1 해결
+        List<Member> members = memberRepository.findEntityGraphByUsername("member1");
+
+        /* member에 있는 teamId는 프록시 객체만 가져오지만 teamEntity 내의
+         값을 이용하고 싶으면 실제 객체를 가져온다. 이 과정을 LAZY 로딩이라 한다.*/
+        for(Member member : members){
+            System.out.println("member = " + member);
+            System.out.println("member.team = " + member.getTeam().getName());
+        }
+
+     //then
+    }
 }
