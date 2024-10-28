@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import study.datajpa.entity.Member;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@Rollback(value = false)
 class MemberJpaRepositoryTest {
 
     @Autowired
@@ -79,7 +81,7 @@ class MemberJpaRepositoryTest {
 
     @DisplayName("페이징 기술을 활용하여 원하는 범위의 값을 가지고 올 수 있다.")
     @Test
-    void test(){
+    public void paging(){
      //given
         memberJpaRepository.save(new Member("member1", 10));
         memberJpaRepository.save(new Member("member2", 10));
