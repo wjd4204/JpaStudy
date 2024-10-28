@@ -1,5 +1,7 @@
 package study.datajpa.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class MemberRepositoryTest {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @DisplayName("")
     @Test
@@ -152,7 +157,7 @@ public class MemberRepositoryTest {
         memberRepository.save(m1);
         memberRepository.save(m2);
 
-        List<Member> aaa = memberRepository.findListByUsername("AAA"); // 아무것도 가져오지 않았을 경우, 오류가 아닌 빈 컬렉션을 반환한다!!
+        List<Member> aaa = memberRepository.findByUsername("AAA"); // 아무것도 가져오지 않았을 경우, 오류가 아닌 빈 컬렉션을 반환한다!!
         Member findMember = memberRepository.findMemberByUsername("AAA"); // 단일 객체는 빈 값이 아닌 null을 반환한다!!
         System.out.println("findMember = " + findMember);
 
@@ -189,5 +194,27 @@ public class MemberRepositoryTest {
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
 
+    }
+
+    @DisplayName("20살 이상인 멤버들에게 원래 나이의 +1 값으로 수정한다.")
+    @Test
+    public void bulkUpdate(){
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member( "member5", 40));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+//        em.clear();
+
+        List<Member> result = memberRepository.findByUsername("member5");
+        Member member5 = result.get(0);
+        System.out.println("member5 = " + member5);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
     }
 }
