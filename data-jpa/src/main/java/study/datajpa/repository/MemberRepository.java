@@ -12,7 +12,8 @@ import study.datajpa.entity.Member;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+// 반드시 사용자 정의 리포지토리가 필요한 것은 아니다. 그냥 임의로 리포지토리를 만들어 직접 사용해도 된다.(반드시 상속할 필요는 없다는 말)
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -67,4 +68,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Member> findLockByUsername(String username);
+
+    /* 다양한 이유로 인터페이스의 메서드를 직접 구현하고 싶다면, EntityManager, JDBC Template, MyBatis, Querydsl 등을 사용하자! */
 }

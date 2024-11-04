@@ -35,6 +35,9 @@ public class MemberRepositoryTest {
     @PersistenceContext
     EntityManager em;
 
+    @Autowired
+    MemberQueryRepository memberQueryRepository;
+
     @DisplayName("")
     @Test
     void test(){
@@ -276,5 +279,16 @@ public class MemberRepositoryTest {
         // 트랜잭션끼리 충돌이 발생한다고 가정하고 락을 건다. DB에서 제공하는 락기능을 사용한다.
         // LockMode가 PESSIMISTIC_WRITE를 사용하면 다른 트랜잭션에서 읽거나 쓰지를 못한다. 이를 '배타적 잠금'이라고 한다.
         List<Member> result = memberRepository.findLockByUsername("member1");
+    }
+
+    @DisplayName("MemberRepositoryCustom에 작성한 메서드를 MemberRepository에 상속")
+    @Test
+    void callCustom(){
+     //given
+        List<Member> result = memberRepository.findMemberCustom();
+
+        //when
+
+     //then
     }
 }
