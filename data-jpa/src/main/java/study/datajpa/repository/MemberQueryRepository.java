@@ -14,7 +14,7 @@ public class MemberQueryRepository {
     private final EntityManager em;
 
     List<Member> findAllMembers(){
-        em.createQuery("select m from Member m")
+        return em.createQuery("select m from Member m")
                 .getResultList();
     }
 }
