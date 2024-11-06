@@ -291,4 +291,8 @@ public class MemberRepositoryTest {
 
      //then
     }
+
+    /* 매우 중요한 사실!
+    save 메서드는 새로운 엔티티가 오면 저장을 하고, 그렇지 않으면 기존 엔티티와 병합한다!
+     */
 }
