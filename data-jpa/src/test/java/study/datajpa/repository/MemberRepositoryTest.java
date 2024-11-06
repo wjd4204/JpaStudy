@@ -35,6 +35,9 @@ public class MemberRepositoryTest {
     @PersistenceContext
     EntityManager em;
 
+    @Autowired
+    MemberQueryRepository memberQueryRepository;
+
     @DisplayName("")
     @Test
     void test(){
@@ -277,4 +280,19 @@ public class MemberRepositoryTest {
         // LockMode가 PESSIMISTIC_WRITE를 사용하면 다른 트랜잭션에서 읽거나 쓰지를 못한다. 이를 '배타적 잠금'이라고 한다.
         List<Member> result = memberRepository.findLockByUsername("member1");
     }
+
+    @DisplayName("MemberRepositoryCustom에 작성한 메서드를 MemberRepository에 상속")
+    @Test
+    void callCustom(){
+     //given
+        List<Member> result = memberRepository.findMemberCustom();
+
+        //when
+
+     //then
+    }
+
+    /* 매우 중요한 사실!
+    save 메서드는 새로운 엔티티가 오면 저장을 하고, 그렇지 않으면 기존 엔티티와 병합한다!
+     */
 }
