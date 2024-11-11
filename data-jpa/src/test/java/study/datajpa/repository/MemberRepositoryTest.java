@@ -7,9 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -319,5 +317,42 @@ public class MemberRepositoryTest {
 
         //then
         Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+
+    @DisplayName("")
+    @Test
+    void queryByExample(){
+     //given
+        Team teamA = new Team("TeamA");
+        em.persist(teamA);
+
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m1", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+     //when
+        //Probe : 필드에 데이터가 있는 실제 도메인 객체
+        //ExampleMatcher: 특정 필드를 일치시키는 상세 정보 제공, 재사옹 가능
+        //Example: Probe와 ExampleMatcher로 구성되며 쿼리를 생성하는데 사용된다. 특정 조건의 결과들을 조회할 때 사용한다.
+        Member member = new Member("m1");
+        Team team = new Team("teamA");
+        member.setTeam(team);
+
+        //withIgnore 외에도 matchingAll(), matchingAny(), withIgnorePath(), withIgnoreCase() 등의 메서드를 사용할 수 있다.
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("age");// age라는 속성이 있으면 무시한다는 의미
+
+        Example<Member> example = Example.of(member, matcher);
+
+        List<Member> result = memberRepository.findAll(example);
+
+        //then
+        Assertions.assertThat(result.get(0).getUsername()).isEqualTo("m1");
+
+        //example의 단점 : join은 돠지만 이너 조인만 가능하고 outer 조인이 불가능하다.
     }
 }
