@@ -319,7 +319,7 @@ public class MemberRepositoryTest {
         Assertions.assertThat(result.size()).isEqualTo(1);
     }
 
-    @DisplayName("")
+    @DisplayName("Example을 사용하여 원하는 특정 조건의 결과들을 조회할 수 있다.")
     @Test
     void queryByExample(){
      //given
