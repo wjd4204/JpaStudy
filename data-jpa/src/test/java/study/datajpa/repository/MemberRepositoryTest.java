@@ -355,4 +355,40 @@ public class MemberRepositoryTest {
 
         //example의 단점 : join은 돠지만 이너 조인만 가능하고 outer 조인이 불가능하다.
     }
+
+    @DisplayName("")
+    @Test
+    void projections(){
+     //given
+        Team teamA = new Team("TeamA");
+        em.persist(teamA);
+
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m1", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+     //when
+//        List<UsernameOnlyDto> result = memberRepository.findProjectionsByUsername("m1");
+//
+//        for(UsernameOnlyDto usernameOnlyDto : result){
+//            System.out.println("usernameOnly = " + usernameOnlyDto.getUsername());
+//        }
+
+        List<NestedClosedProjections> result = memberRepository.findProjectionsByUsername("m1", NestedClosedProjections.class);
+
+        for(NestedClosedProjections nestedClosedProjections : result){
+            //System.out.println("nestedClosedProjections = " + nestedClosedProjections);
+            String username = nestedClosedProjections.getUsername();
+            String teamName = nestedClosedProjections.getTeam().getName();
+            System.out.println("username = " + username);
+            System.out.println("teamName = " + teamName);
+        }
+
+
+        //then
+    }
 }

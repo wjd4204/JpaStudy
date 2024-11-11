@@ -70,4 +70,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<Member> findLockByUsername(String username);
 
     /* 다양한 이유로 인터페이스의 메서드를 직접 구현하고 싶다면, EntityManager, JDBC Template, MyBatis, Querydsl 등을 사용하자! */
+
+    <T> List<T> findProjectionsByUsername(@Param("username") String username, Class<T> type);
 }
