@@ -29,3 +29,27 @@
      - 프로젝션 대상이 root 엔티티면 유용하다.
      - 프로젝션 대상이 root 엔티티를 넘어가면 JPQL SELECT 최적화가 안된다.
      - 실무의 복잡한 쿼리를 해결하기에는 한계가 있으므로 단순할 때만 사용하는 것을 지향.(QueryDSL을 사용하자 그냥))
+
+### 4. 네이티브 쿼리
+- 가급적 네이티브 쿼리는 사용하지 않는 것이 좋다.
+- 이를 쓰지 않기 위해 Projections을 활용하는 것이 좋다!
+- 스프링 데이터 JPA 기반 네이티브 쿼리
+  - 페이징 지원
+  - 반환 타입 | Object[], Tuple, DTO
+  - 제약 사항
+    - Sort 파라미터를 통한 정렬이 정상 동작하지 않을 수도 있다.
+    - JPQL처럼 어플리케이션 로딩 시점에 문법이 확인 불가하다.
+    - 동적 쿼리가 불가하다.
+
+1. JPA 네이티브 SQL 지원
+   - JPQL은 위치 기반 파라미터를 1부터 시작하지만, 네이티브는 0부터 시작한다.
+   - 네이티브 SQL을 DTO로 변환을 하기 위해서는
+     1. DTO 대신 JPA TUPLE 조회
+     2. DTO 대신 MAP 조회
+     3. @SqlResultSetMapping(복잡함)
+     4. Hibernate ResultTransformer(복잡함)
+   - 위와 같은 방법이 있지만 최종적으로는 JdbcTemplate나 MyBatis를 권장한다.
+   - Projections를 활용하는 방법도 있다!
+2. 동적 네이티브 쿼리
+   - 하이버네이트를 직접 활용한다.
+   - 스프링 JdbcTemplate, MyBatis, jooq 같은 외부 라이브러리를 사용한다.

@@ -3,6 +3,7 @@ package study.datajpa.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -390,5 +391,32 @@ public class MemberRepositoryTest {
 
 
         //then
+    }
+
+    @DisplayName("Projection을 이용하여 Native 쿼리를 페이징")
+    @Test
+    void nativeQuery(){
+     //given
+        Team teamA = new Team("TeamA");
+        em.persist(teamA);
+
+        Member m1 = new Member("m1", 0, teamA);
+        Member m2 = new Member("m2", 0, teamA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+     //when
+        Page<MemberProjection> result = memberRepository.findByNativeProjection(PageRequest.of(0,10));
+        List<MemberProjection> content = result.getContent();
+
+        for(MemberProjection memberProjection : content){
+            System.out.println("memberProjection = " + memberProjection.getUsername());
+            System.out.println("memberProjection = " + memberProjection.getTeamName());
+        }
+
+     //then
     }
 }
