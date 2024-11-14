@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 // 반드시 사용자 정의 리포지토리가 필요한 것은 아니다. 그냥 임의로 리포지토리를 만들어 직접 사용해도 된다.(반드시 상속할 필요는 없다는 말)
-public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, JpaSpecificationExecutor<Member> {
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -70,4 +70,15 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<Member> findLockByUsername(String username);
 
     /* 다양한 이유로 인터페이스의 메서드를 직접 구현하고 싶다면, EntityManager, JDBC Template, MyBatis, Querydsl 등을 사용하자! */
+
+    <T> List<T> findProjectionsByUsername(@Param("username") String username, Class<T> type);
+
+    @Query(value = "select * from member where username =?", nativeQuery = true)
+    Member findByNativeQuery(String username);
+
+    @Query(value = "select m.member_id as id, m.username, t.name as teamName" +
+            " from member m left join team t ",
+            countQuery = "select count(*) from member",
+            nativeQuery = true)
+    Page<MemberProjection> findByNativeProjection(Pageable pageable);
 }
