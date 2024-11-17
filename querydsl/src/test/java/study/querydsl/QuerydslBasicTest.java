@@ -77,4 +77,33 @@ public class QuerydslBasicTest {
         //then
         assertThat(findMember.getUsername()).isEqualTo("member1");
     }
+
+    @DisplayName("검색 조건을 활용하여 원하는 객체를 조회한다.")
+    @Test
+    void search(){
+     //given
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1").and(member.age.eq(10)))
+                .fetchOne();
+
+        // then
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @DisplayName("체인을 사용하여 검색 조건을 추가할 수 있다.")
+    @Test
+    void searchAndParam(){
+        //given
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10)
+                )
+                .fetchOne();
+
+        // then
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
 }

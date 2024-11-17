@@ -12,3 +12,6 @@
 - querydsl로 실행된 코드는 결과적으로 jpql이 된다.
   - 만일 지금 실행되는 jpql을 보고 싶다면 application.yml에 hibernate 밑에
   use_sql_comments를 삽입하자.
+
+### 검색 조건 쿼리
+
