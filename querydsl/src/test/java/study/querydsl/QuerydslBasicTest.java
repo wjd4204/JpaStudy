@@ -168,4 +168,32 @@ public class QuerydslBasicTest {
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNull.getUsername()).isNull();
     }
+
+    @DisplayName("페이징 기술을 구현한다.")
+    @Test
+    void paging1(){
+     //given
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetch();
+    }
+
+    @DisplayName("페이징 기술을 구현한다.")
+    @Test
+    void paging2(){
+        QueryResults<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
+
+        assertThat(result.getTotal()).isEqualTo(4);
+        assertThat(result.getLimit()).isEqualTo(2);
+        assertThat(result.getOffset()).isEqualTo(1);
+        assertThat(result.getResults().size()   ).isEqualTo(2);
+    }
 }
