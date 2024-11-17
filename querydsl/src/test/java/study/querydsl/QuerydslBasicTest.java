@@ -14,6 +14,7 @@ import study.querydsl.entity.QMember;
 import study.querydsl.entity.Team;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static study.querydsl.entity.QMember.member;
 
 @SpringBootTest
 @Transactional
@@ -63,13 +64,14 @@ public class QuerydslBasicTest {
     @Test
     void startQuerydsl(){
      //given
-        QMember m = new QMember("m");
+        //QMember m = new QMember("m");
+        //QMember m = QMember.member; // or static import하기
 
      //when
         Member findMember = queryFactory
-                .select(m)
-                .from(m)
-                .where(m.username.eq("member1")) // 파라미터 바인딩 처리
+                .select(member)
+                .from(member)
+                .where(member.username.eq("member1")) // 파라미터 바인딩 처리
                 .fetchOne();
 
         //then
