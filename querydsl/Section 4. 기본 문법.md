@@ -14,4 +14,15 @@
   use_sql_comments를 삽입하자.
 
 ### 검색 조건 쿼리
-
+### 결과 조회
+- fetch()
+  - 리스트 조회, 데이터 없으면 빈 리스트 반환
+- fetchOne()
+  - 하나의 결과 조회
+  - 결과가 없으면 null이고, 둘 이상이면 NonUniqueResultException을 발행
+- fetchFirst()
+  - limit(1).fetchOne()
+- fetchResults()
+  - 페이징 정보를 포함하고, total count 쿼리를 추가 실행한다.
+- fetchCount()
+  - count 쿼리로 변경해서 count 수를 조회한다.
