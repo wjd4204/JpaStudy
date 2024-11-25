@@ -3,6 +3,7 @@ package study.querydsl;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -442,6 +443,35 @@ public class QuerydslBasicTest {
         //then
         for (String s : result) {
             System.out.println("s = " + s);
+        }
+    }
+
+    @DisplayName("상수 A를 반드시 가져온다.")
+    @Test
+    void constant(){
+     //when
+        List<Tuple> result = queryFactory
+                .select(member.username, Expressions.constant("A"))
+                .from(member)
+                .fetch();
+        //then
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+    }
+
+    @DisplayName("문자열을 더한다.")
+    @Test
+    void concat(){
+     //when
+        List<String> result = queryFactory
+                .select(member.username.concat("_").concat(member.age.stringValue()))
+                .from(member)
+                .where(member.username.eq("member1"))
+                .fetch();
+        //then
+        for (String o : result) {
+            System.out.println("o = " + o);
         }
     }
 }
