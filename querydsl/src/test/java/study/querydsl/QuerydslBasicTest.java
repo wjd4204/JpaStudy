@@ -310,7 +310,7 @@ public class QuerydslBasicTest {
         List<Tuple> result = queryFactory
                 .select(member, team)
                 .from(member)
-                .join(team).on(member.username.eq(team.name))
+                .leftJoin(team).on(member.username.eq(team.name))
                 .fetch();
 
         for (Tuple tuple : result) {
@@ -472,6 +472,34 @@ public class QuerydslBasicTest {
         //then
         for (String o : result) {
             System.out.println("o = " + o);
+        }
+    }
+
+    @DisplayName("")
+    @Test
+    void simpleProjection(){
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                .fetch();
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @DisplayName("")
+    @Test
+    void tupleProjection(){
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age)
+                .from(member)
+                .fetch();
+
+        for (Tuple tuple : result) {
+            String username = tuple.get(member.username);
+            Integer age = tuple.get(member.age);
+            System.out.println("username = " + username);
+            System.out.println("age = " + age);
         }
     }
 }
