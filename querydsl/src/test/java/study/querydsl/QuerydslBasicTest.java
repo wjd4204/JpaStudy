@@ -202,7 +202,7 @@ public class QuerydslBasicTest {
         assertThat(result.getTotal()).isEqualTo(4);
         assertThat(result.getLimit()).isEqualTo(2);
         assertThat(result.getOffset()).isEqualTo(1);
-        assertThat(result.getResults().size()   ).isEqualTo(2);
+        assertThat(result.getResults().size()).isEqualTo(2);
     }
 
     @DisplayName("다양한 집합 함수를 이용하여 결과를 집계한다.")
@@ -300,7 +300,7 @@ public class QuerydslBasicTest {
     }
 
     // 연관관계 없는 엔티티 외부 조인
-    @DisplayName("회원이 이름이 팀 이름과 같은 회원을 조회한다.")
+    @DisplayName("회원의 이름이 팀 이름과 같은 회원을 조회한다.")
     @Test
     void join_on_no_relation() {
         em.persist(new Member("teamA"));
