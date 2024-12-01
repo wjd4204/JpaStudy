@@ -31,4 +31,9 @@
 1. BooleanBuilder
    1. "dynamicQuery_BooleanBuilder"의 searchMember1을 보면 BooleanBuilder를 통해 입력된 값에 대한 조건을 생성하여 추가해서
    최종적인 파라미터들을 queryFactory에 반영하는 것을 볼 수 있다.
-2. Where 다중 파라미터 사용
+2. Where 다중 파라미터 사용(이 방법을 선호!)
+   1. BooleanExpression을 사용하여 where 안에 다중 파라미터를 적용할 수 있다!
+   2. where 조건에 Null 값은 무시가 되며, 메서드를 다른 쿼리에도 재사용할 수 있다!
+   3. 쿼리 자체의 가독성이 높아진다는 장점이 있다.
+   4. 큰 특징으로 "조합 가능"이 되어 여러 조건들을 여러 쿼리에서 같이 사용하면 isServicable이라는 서비스 가능 상태를 확인 할 수 있다!
+   2. 이는 예를 들어 광고 상태의 유효성과 날짜의 조건을 보는 쿼리라면 isServicable이라는 메서드로 만들어 조회할 수 있다.
