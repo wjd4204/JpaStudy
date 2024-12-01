@@ -701,4 +701,35 @@ public class QuerydslBasicTest {
                 .set(member.age, member.age.add(1))
                 .execute();
     }
+
+    @DisplayName("querydsl에서 함수를 호출하는 방법을 알아보자.")
+    @Test
+    void sqlFunction(){
+        List<String> result = queryFactory
+                .select(Expressions.stringTemplate("function('replace', {0}, {1}, {2})",
+                        member.username, "member", "M"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @DisplayName("where문에 function을 적용한다.")
+    @Test
+    void sqlFunction2(){
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+//                .where(member.username.eq(
+//                        Expressions.stringTemplate("function('lower', {0})",
+//                        member.username)))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
 }
