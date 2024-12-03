@@ -675,7 +675,7 @@ public class QuerydslBasicTest {
         // member3 = 30 -> 유지
         // member4 = 40 -> 유지
 
-        long count = queryFactory
+        queryFactory
                 .update(member)
                 .set(member.username, "비회원")
                 .where(member.age.lt(28))
@@ -696,7 +696,7 @@ public class QuerydslBasicTest {
     @DisplayName("bulk 연산으로 모든 항목의 나이에 1을 더한다.")
     @Test
     void bulkAdd(){
-        long count = queryFactory
+        queryFactory
                 .update(member)
                 .set(member.age, member.age.add(1))
                 .execute();
