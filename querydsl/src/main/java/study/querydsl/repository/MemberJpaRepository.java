@@ -1,7 +1,6 @@
 package study.querydsl.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -42,7 +41,7 @@ public class MemberJpaRepository {
         return em.createQuery("select m from Member m", Member.class).getResultList();
     }
 
-    public List<Member> findAll_Querydsl(){
+    public List<Member> findAllQuerydsl(){
         return queryFactory
                 .selectFrom(member)
                 .fetch();
@@ -54,7 +53,7 @@ public class MemberJpaRepository {
                 .getResultList();
     }
 
-    public List<Member> findByUsername_Querydsl(String username){
+    public List<Member> findByUsernameQuerydsl(String username){
         return queryFactory
                 .selectFrom(member)
                 .where(member.username.eq(username))
