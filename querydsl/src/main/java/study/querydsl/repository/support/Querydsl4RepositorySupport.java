@@ -29,7 +29,7 @@ public abstract class Querydsl4RepositorySupport {
     private EntityManager entityManager;
     private JPAQueryFactory jpaQueryFactory;
 
-    public Querydsl4RepositorySupport(Class<?> domainClass) {
+    protected Querydsl4RepositorySupport(Class<?> domainClass) {
         Assert.notNull(domainClass, "Domain class must not be null");
         this.domainClass = domainClass;
     }
