@@ -24,4 +24,15 @@
   1. Querydsl 3.x 버전을 대상으로 만들었기에 Querydsl 4.x에 나온 JPAQueryFactory로 시작할 수가 없다.
   2. "QueryFactory"를 제공하지 않는다.
   3. 스프링 데이터 Sort 기능이 정상 동작하지 않는다. 정 사용하고 싶다면 직접 처리하여야 한다.
-결론! -> 그냥 원래꺼 쓰자.
+결론! -> 사용하지 않을 필요는 없지만 select절 스타트가 그리워질듯..
+
+### 4. Querydsl 지원 클래스 직접 만들기
+- QuerydslRepositorySupport가 지닌 한계를 극복하기 위해서 Querydsl 클래스를 직접 만들어보자!
+- 해당 클래스를 직접 생성했을 때의 장점은 다음과 같다.
+  1. 스프링 데이터가 제공하는 페이징을 편리하게 변환이 가능하다.
+  2. 페이징과 카운트 쿼리를 분리할 수 있다.
+  3. 스프링 데이터 sort를 지원한다.
+  4. 'select()', 'selectFrom()'으로 시작이 가능하다.
+  5. 'EntityManger', 'QueryFactory'를 제공한다.
+
+- MemberTestRepository에 있는 searchPageByApplyPage의 applyPagination에는 Querydsl 페이징과 sort 모두가 지원된다!
